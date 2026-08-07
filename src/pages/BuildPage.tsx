@@ -1,6 +1,7 @@
 import { ArrowLeft, Check, Clipboard, ExternalLink, ShieldAlert } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link, Navigate, useParams } from "react-router-dom"
+import { buildTiles, GameTile } from "@/components/GameTile"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Button } from "@/components/ui"
 import { getBuild } from "@/data/builds"
 import { skillCost, statBuyCost } from "@/lib/utils"
@@ -35,7 +36,7 @@ export function BuildPage() {
     <Link to="/" className="back-link"><ArrowLeft size={14} />Build guides</Link>
     <header className="guide-header">
       <div className="tag-row"><Badge>{build.archetype}</Badge></div>
-      <h1>{build.title}</h1>
+      <div className="guide-title-row"><GameTile name={buildTiles[build.slug]} size={40} /><h1>{build.title}</h1></div>
       <p>{build.summary}</p>
       <dl className="guide-vitals">
         <div><dt>Style</dt><dd>{build.combatStyle}</dd></div>

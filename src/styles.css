@@ -45,6 +45,8 @@ li + li { margin-top: .3rem; }
 .header-inner { min-height: 54px; display: flex; align-items: center; gap: 1rem; }
 .brand { display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap; }
 .brand > span { color: var(--gold); font: 700 1rem var(--mono); }
+.game-tile { display: inline-block; flex: 0 0 auto; background-image: url("/sil-q-tiles.png"); background-repeat: no-repeat; image-rendering: pixelated; }
+.brand > .brand-tile { box-shadow: 0 0 0 1px #4b4229, 0 0 12px rgba(196, 167, 96, .1); }
 .brand strong { font-size: 1rem; letter-spacing: -.01em; }
 .site-version { color: var(--dim); font: .72rem var(--mono); }
 .main-nav { margin-left: auto; display: flex; align-items: center; gap: .15rem; }
@@ -85,10 +87,13 @@ li + li { margin-top: .3rem; }
 .primer-start-link, .primer-manual-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: .9rem; color: var(--gold); font-size: .84rem; font-weight: 650; }
 .primer-start-link:hover, .primer-manual-link:hover { color: #dfc27c; text-decoration: underline; text-underline-offset: 3px; }
 .build-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem; }
-.build-card { display: block; padding: 1.15rem; cursor: pointer; transition: border-color 120ms ease, background-color 120ms ease; }
-.build-card:hover { border-color: #5d5030; background: var(--panel-2); }
+.build-card { display: block; padding: 1.15rem; cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
+.build-card:hover { border-color: #5d5030; background: var(--panel-2); box-shadow: 0 9px 24px rgba(0, 0, 0, .22); transform: translateY(-2px); }
+.build-card-title { display: flex; align-items: center; gap: .7rem; margin-bottom: .5rem; }
+.build-card-title .game-tile { box-shadow: 0 0 0 1px #423b27; background-color: #090b09; transition: filter 160ms ease, transform 160ms ease; }
+.build-card:hover .build-card-title .game-tile { filter: brightness(1.16); transform: scale(1.07); }
 .build-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
-.build-card h2 { margin: 0 0 .45rem; font-size: 1.22rem; }
+.build-card h2 { margin: 0; font-size: 1.22rem; }
 .build-card:hover h2 { color: var(--gold); }
 .build-card > p { min-height: 2.9em; margin-bottom: .85rem; color: var(--muted); font-size: .88rem; }
 .build-card-meta { display: grid; grid-template-columns: 1fr 1fr; margin: 0; border-block: 1px solid var(--border-soft); }
@@ -101,11 +106,15 @@ li + li { margin-top: .3rem; }
 .key-piece-preview p { margin: .15rem 0 0; color: var(--muted); font-size: .78rem; }
 .build-card-bottom { align-items: end; }
 .card-link { flex: 0 0 auto; }
+.card-link svg { transition: transform 160ms ease; }
+.build-card:hover .card-link svg { transform: translateX(3px); }
 
 .guide-page { max-width: 1040px; }
 .back-link { margin-bottom: 1.25rem; }
 .guide-header { max-width: 790px; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
-.guide-header h1 { margin: .65rem 0 .45rem; }
+.guide-title-row { display: flex; align-items: center; gap: .8rem; margin: .65rem 0 .45rem; }
+.guide-title-row .game-tile { box-shadow: 0 0 0 1px #4b4229; background-color: #090b09; }
+.guide-header h1 { margin: 0; }
 .guide-header > p { max-width: 720px; margin-bottom: 1rem; color: var(--muted); }
 .guide-vitals { display: flex; flex-wrap: wrap; gap: .6rem 1.5rem; margin: 0; }
 .guide-vitals > div { min-width: 110px; }
@@ -119,7 +128,8 @@ li + li { margin-top: .3rem; }
 .guide-content { min-width: 0; max-width: 780px; }
 .guide-section { padding: 1.5rem 0; border-top: 1px solid var(--border); }
 .guide-section:first-child { padding-top: 0; border-top: 0; }
-.guide-section h2 { margin-bottom: .8rem; }
+.guide-section h2 { display: flex; align-items: center; gap: .5rem; margin-bottom: .8rem; }
+.guide-section h2::before { content: "✦"; display: inline-block; flex: 0 0 auto; color: var(--gold); font: .72em var(--mono); line-height: 1; }
 .build-plan, .section-intro { color: #c9c7bd; }
 
 .key-pieces { border: 1px solid var(--border); }
