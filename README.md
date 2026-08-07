@@ -34,3 +34,7 @@ The included `netlify.toml` uses `npm run build`, publishes `dist`, and provides
 ## Cloudflare
 
 The included `wrangler.jsonc` publishes `dist` as static assets and enables Cloudflare's single-page application fallback. Cloudflare's Git build should use `npm run build` as the build command and `npx wrangler deploy` as the deploy command.
+
+## Vercel
+
+Import the GitHub repository into Vercel and keep the detected Vite settings. The build command is `npm run build` and the output directory is `dist`. The included `vercel.json` rewrites direct visits to application routes to `index.html`, allowing React Router to handle them.
