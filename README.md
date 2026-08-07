@@ -29,4 +29,8 @@ Build and primer pages are derived from these typed records; there is no backend
 
 ## Netlify
 
-The included `netlify.toml` uses `npm run build` and publishes `dist`. `public/_redirects` provides the SPA fallback required for direct visits to routes such as `/builds/stealth-assassin`.
+The included `netlify.toml` uses `npm run build`, publishes `dist`, and provides the SPA fallback required for direct visits to routes such as `/builds/stealth-assassin`.
+
+## Cloudflare
+
+The included `wrangler.jsonc` publishes `dist` as static assets and enables Cloudflare's single-page application fallback. Cloudflare's Git build should use `npm run build` as the build command and `npx wrangler deploy` as the deploy command.

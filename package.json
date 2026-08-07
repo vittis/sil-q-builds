@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "deploy:cloudflare": "npm run build && wrangler deploy",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -36,6 +37,7 @@
     "jsdom": "^27.0.1",
     "typescript": "latest",
     "vite": "latest",
-    "vitest": "latest"
+    "vitest": "latest",
+    "wrangler": "^4.120.0"
   }
 }
