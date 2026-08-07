@@ -32,7 +32,7 @@ export function SiteLayout() {
     </header>
     <main id="main-content"><Outlet /></main>
     <footer className="site-footer">
-      <div className="container footer-line"><span>Unofficial Sil-Q 1.5 guide.</span><a href="https://github.com/sil-quirk/sil-q/blob/master/Sil-Q%20v1.5.0.pdf" target="_blank" rel="noreferrer">Manual</a><a href="https://github.com/sil-quirk/sil-q" target="_blank" rel="noreferrer">Source</a><a href="https://github.com/sil-quirk/sil-q/blob/master/lib/xtra/graf/16x16_microchasm.png" target="_blank" rel="noreferrer">Tiles by MicroChasm</a></div>
+      <div className="container footer-line"><span>Unofficial Sil-Q 1.5 guide.</span><a href="https://github.com/sil-quirk/sil-q/blob/master/Sil-Q%20v1.5.0.pdf" target="_blank" rel="noreferrer">Manual</a><a href="https://github.com/sil-quirk/sil-q" target="_blank" rel="noreferrer">Source</a><a href="https://github.com/sil-quirk/sil-q/blob/master/lib/xtra/graf/16x16_microchasm.png" target="_blank" rel="noreferrer">Tiles by MicroChasm</a><a href="https://github.com/vittis" target="_blank" rel="noreferrer">Made by vittis</a></div>
     </footer>
   </div>
 }

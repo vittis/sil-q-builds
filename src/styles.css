@@ -90,8 +90,8 @@ li + li { margin-top: .3rem; }
 .build-card { display: block; padding: 1.15rem; cursor: pointer; transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease; }
 .build-card:hover { border-color: #5d5030; background: var(--panel-2); box-shadow: 0 9px 24px rgba(0, 0, 0, .22); transform: translateY(-2px); }
 .build-card-title { display: flex; align-items: center; gap: .7rem; margin-bottom: .5rem; }
-.build-card-title .game-tile { box-shadow: 0 0 0 1px #423b27; background-color: #090b09; transition: filter 160ms ease, transform 160ms ease; }
-.build-card:hover .build-card-title .game-tile { filter: brightness(1.16); transform: scale(1.07); }
+.build-card-title .game-tile { box-shadow: 0 0 0 1px #423b27; background-color: #090b09; transition: filter 160ms ease; }
+.build-card:hover .build-card-title .game-tile { filter: brightness(1.16); }
 .build-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
 .build-card h2 { margin: 0; font-size: 1.22rem; }
 .build-card:hover h2 { color: var(--gold); }

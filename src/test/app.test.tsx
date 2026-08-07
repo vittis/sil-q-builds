@@ -11,10 +11,17 @@ function renderRoute(route: string) {
 describe("site routes and interactions", () => {
   it.each(["/", "/builds"])("renders the build library at %s", (route) => {
     renderRoute(route)
-    expect(screen.getByRole("heading", { name: "Build library", level: 1 })).toBeInTheDocument()
+    expect(screen.queryByRole("heading", { name: "Build library" })).not.toBeInTheDocument()
     expect(screen.getByText("Community build guides for Sil-Q, with starting characters, key abilities, progression, and practical play advice.")).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Ring of Secrets" })).toBeInTheDocument()
-    expect(screen.getAllByRole("link", { name: /build guide$/i })).toHaveLength(10)
+    const buildLinks = screen.getAllByRole("link", { name: /build guide$/i })
+    expect(buildLinks).toHaveLength(10)
+    expect(buildLinks.slice(1, 5).map((link) => link.getAttribute("aria-label"))).toEqual([
+      "Open Dodging & Flanking Mobile Duelist build guide",
+      "Open Porcupine Light-Spear Smith build guide",
+      "Open Ring of Secrets Utility Smith build guide",
+      "Open Adversity & Vengeance Juggernaut build guide",
+    ])
     expect(screen.queryByText(/Steal a Silmaril/i)).not.toBeInTheDocument()
   })
 
@@ -85,6 +92,11 @@ describe("site routes and interactions", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument()
     expect(screen.getByRole("navigation", { name: "Mobile navigation" })).toBeInTheDocument()
     expect(screen.queryByRole("link", { name: /game source/i })).not.toBeInTheDocument()
+  })
+
+  it("links to the creator from the footer", () => {
+    renderRoute("/")
+    expect(screen.getByRole("link", { name: "Made by vittis" })).toHaveAttribute("href", "https://github.com/vittis")
   })
 
   it("starts the primer with the manual and omits the source index", () => {
