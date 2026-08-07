@@ -11,7 +11,8 @@ function renderRoute(route: string) {
 describe("site routes and interactions", () => {
   it.each(["/", "/builds"])("renders the build library at %s", (route) => {
     renderRoute(route)
-    expect(screen.getByRole("heading", { name: "Build guides", level: 1 })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Build library", level: 1 })).toBeInTheDocument()
+    expect(screen.getByText("Community build guides for Sil-Q, with starting characters, key abilities, progression, and practical play advice.")).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Ring of Secrets" })).toBeInTheDocument()
     expect(screen.getAllByRole("link", { name: /build guide$/i })).toHaveLength(10)
     expect(screen.queryByText(/Steal a Silmaril/i)).not.toBeInTheDocument()
