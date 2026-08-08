@@ -3,6 +3,20 @@ import { builds, getBuild } from "@/data/builds"
 import { sourceMap } from "@/data/sources"
 import { skillCost, statBuyCost } from "@/lib/utils"
 
+const auditedStartingXp: Record<string, { skills: number; abilities: number; unspent: number }> = {
+  "elbereth-archer": { skills: 3700, abilities: 500, unspent: 800 },
+  "dodging-flanking-duelist": { skills: 4400, abilities: 500, unspent: 100 },
+  "adversity-vengeance-juggernaut": { skills: 4800, abilities: 0, unspent: 200 },
+  "shield-archer": { skills: 3000, abilities: 1500, unspent: 500 },
+  "stealth-assassin": { skills: 4700, abilities: 0, unspent: 300 },
+  "pure-stealth-pacifist": { skills: 3600, abilities: 1000, unspent: 400 },
+  "porcupine-light-spear-smith": { skills: 4400, abilities: 500, unspent: 100 },
+  "ring-of-secrets-utility-smith": { skills: 4300, abilities: 0, unspent: 700 },
+  "defensive-polearm": { skills: 4200, abilities: 500, unspent: 300 },
+  "smash-smash-smash": { skills: 3800, abilities: 500, unspent: 700 },
+  "thresholds-controller": { skills: 3700, abilities: 1000, unspent: 300 },
+}
+
 describe("build content", () => {
   it("publishes exactly eleven unique guides", () => {
     expect(builds).toHaveLength(11)
@@ -11,11 +25,17 @@ describe("build content", () => {
     expect(builds.map((build) => build.slug)).not.toEqual(expect.arrayContaining(["fingolfin-elbereth-hybrid", "point-blank-blocking-archer", "polearm-control-fighter", "rapid-attack-two-weapon"]))
   })
 
-  it.each(builds)("keeps $title within legal creation budgets", (build) => {
+  it.each(builds)("spends the full legal creation budgets for $title", (build) => {
     const xp = build.creation.skills.reduce((total, skill) => total + skillCost(skill.level), 0) + build.creation.abilities.reduce((total, ability) => total + ability.cost, 0)
-    expect(statBuyCost(build.creation.boughtStats)).toBeLessThanOrEqual(13)
+    expect(statBuyCost(build.creation.boughtStats)).toBe(13)
     expect(xp).toBeLessThanOrEqual(5000)
     expect(xp).toBeGreaterThan(0)
+  })
+
+  it.each(builds)("matches the audited starting XP breakdown for $title", (build) => {
+    const skills = build.creation.skills.reduce((total, skill) => total + skillCost(skill.level), 0)
+    const abilities = build.creation.abilities.reduce((total, ability) => total + ability.cost, 0)
+    expect({ skills, abilities, unspent: 5000 - skills - abilities }).toEqual(auditedStartingXp[build.slug])
   })
 
   it.each(builds)("provides a complete concise guide for $title", (build) => {
@@ -60,6 +80,9 @@ describe("build content", () => {
     const porcupine = getBuild("porcupine-light-spear-smith")!
     const guideText = JSON.stringify(porcupine)
     const namedSpears = porcupine.corePieces.find((piece) => piece.name === "Gondolin and Doriath slay spears")!
+    expect(porcupine.creation.stats).toEqual({ str: 1, dex: 5, con: 4, gra: 4 })
+    expect(porcupine.creation.boughtStats).toEqual([1, 3, 2, 2])
+    expect(porcupine.creation.note).toMatch(/skill ranks cost 4,400 XP and leave 600.*Enchantment.*leaves 100 unspent/i)
     expect(namedSpears.timing).toBeUndefined()
     expect(porcupine.gear.join(" ")).toMatch(/Inscribe.*@w1.*@w2.*Press w followed by 1 or 2/i)
     expect(guideText.match(/Gondolin/g)?.length).toBeGreaterThanOrEqual(4)

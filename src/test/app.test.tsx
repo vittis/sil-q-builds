@@ -106,6 +106,14 @@ describe("site routes and interactions", () => {
     expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument()
   })
 
+  it("separates skill and ability XP in the starting character ledger", () => {
+    renderRoute("/builds/porcupine-light-spear-smith")
+    expect(screen.getByText("Skill XP").parentElement).toHaveTextContent("4,400")
+    expect(screen.getByText("Ability XP").parentElement).toHaveTextContent("500")
+    expect(screen.getByText("Total XP").parentElement).toHaveTextContent("4,900 / 5,000")
+    expect(screen.getByText("After abilities").parentElement).toHaveTextContent("100 unspent")
+  })
+
   it("opens the mobile navigation", async () => {
     const user = userEvent.setup()
     renderRoute("/")

@@ -26,9 +26,11 @@ export function BuildPage() {
   if (!build) return <Navigate to="/not-found" replace />
 
   const creation = build.creation
-  const xp = creation.skills.reduce((total, skill) => total + skillCost(skill.level), 0) + creation.abilities.reduce((total, ability) => total + ability.cost, 0)
+  const skillXp = creation.skills.reduce((total, skill) => total + skillCost(skill.level), 0)
+  const abilityXp = creation.abilities.reduce((total, ability) => total + ability.cost, 0)
+  const xp = skillXp + abilityXp
   const statCost = statBuyCost(creation.boughtStats)
-  const checklist = `${build.title}\n${creation.race} — ${creation.house}\nStats: ${creation.stats.str} Str / ${creation.stats.dex} Dex / ${creation.stats.con} Con / ${creation.stats.gra} Gra\nSkills: ${creation.skills.map((skill) => `${skill.name} ${skill.level}`).join(", ")}\nAbilities: ${creation.abilities.map((ability) => ability.name).join(", ")}\nXP spent: ${xp.toLocaleString()} / 5,000`
+  const checklist = `${build.title}\n${creation.race} — ${creation.house}\nStats: ${creation.stats.str} Str / ${creation.stats.dex} Dex / ${creation.stats.con} Con / ${creation.stats.gra} Gra\nSkill ranks to buy: ${creation.skills.map((skill) => `${skill.name} ${skill.level}`).join(", ")}\nStarting abilities: ${creation.abilities.map((ability) => `${ability.name} (${ability.cost === 0 ? "Free" : `${ability.cost.toLocaleString()} XP`})`).join(", ")}\nSkill XP: ${skillXp.toLocaleString()}\nAbility XP: ${abilityXp.toLocaleString()}\nTotal XP spent: ${xp.toLocaleString()} / 5,000\nUnspent after abilities: ${(5000 - xp).toLocaleString()}`
   const copy = async () => {
     await navigator.clipboard.writeText(checklist)
     setCopied(true)
@@ -69,8 +71,8 @@ export function BuildPage() {
           <div className="creation-card">
             <div className="identity-row"><div><small>Race</small><strong>{creation.race}</strong></div><div><small>House</small><strong>{creation.house}</strong></div></div>
             <div className="stat-grid">{Object.entries(creation.stats).map(([key, value]) => <div key={key}><strong>{value}</strong><span>{key}</span></div>)}</div>
-            <div className="recipe-grid"><div><h3>Skills</h3>{creation.skills.map((skill) => <div className="recipe-row" key={skill.name}><span>{skill.name}</span><strong>{skill.level}</strong><small>{skillCost(skill.level).toLocaleString()} XP</small></div>)}</div><div><h3>Abilities</h3>{creation.abilities.map((ability) => <div className="ability-row" key={ability.name}><span><strong>{ability.name}</strong>{ability.note && <small>{ability.note}</small>}</span><Badge tone={ability.cost === 0 ? "moss" : "default"}>{ability.cost === 0 ? "Free" : `${ability.cost} XP`}</Badge></div>)}</div></div>
-            <div className="xp-ledger"><span><small>Stats</small><strong>{statCost} / 13</strong></span><span><small>XP spent</small><strong>{xp.toLocaleString()} / 5,000</strong></span><span><small>Unspent</small><strong>{(5000 - xp).toLocaleString()}</strong></span><Button variant="outline" onClick={copy}>{copied ? <Check size={15} /> : <Clipboard size={15} />}{copied ? "Copied" : "Copy"}</Button></div>
+            <div className="recipe-grid"><div><h3>Skill ranks to buy</h3>{creation.skills.map((skill) => <div className="recipe-row" key={skill.name}><span>{skill.name}</span><strong>{skill.level}</strong><small>{skillCost(skill.level).toLocaleString()} XP</small></div>)}</div><div><h3>Starting abilities</h3>{creation.abilities.map((ability) => <div className="ability-row" key={ability.name}><span><strong>{ability.name}</strong>{ability.note && <small>{ability.note}</small>}</span><Badge tone={ability.cost === 0 ? "moss" : "default"}>{ability.cost === 0 ? "Free" : `${ability.cost} XP`}</Badge></div>)}</div></div>
+            <div className="xp-ledger"><span><small>Stats</small><strong>{statCost} / 13</strong></span><span><small>Skill XP</small><strong>{skillXp.toLocaleString()}</strong></span><span><small>Ability XP</small><strong>{abilityXp.toLocaleString()}</strong></span><span><small>Total XP</small><strong>{xp.toLocaleString()} / 5,000</strong></span><span><small>After abilities</small><strong>{(5000 - xp).toLocaleString()} unspent</strong></span><Button variant="outline" onClick={copy}>{copied ? <Check size={15} /> : <Clipboard size={15} />}{copied ? "Copied" : "Copy"}</Button></div>
             <p className="content-note">{creation.note}</p>
           </div>
         </GuideSection>
