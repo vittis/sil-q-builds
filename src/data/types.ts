@@ -46,7 +46,7 @@ export interface BuildKeyPiece {
 }
 
 export interface BuildPiloting {
-  steps: string[]
+  gameplayLoop: string[]
   positioning: string[]
   retreatWhen: string[]
 }
@@ -70,7 +70,7 @@ export interface BuildGuide {
   stealth: boolean
   summary: string
   plan: string
-  keyPieces: BuildKeyPiece[]
+  corePieces: BuildKeyPiece[]
   creation: CharacterCreation
   optionalAbilities: string[]
   piloting: BuildPiloting

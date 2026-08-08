@@ -3,17 +3,18 @@ import { useEffect, useState } from "react"
 import { Link, Navigate, useParams } from "react-router-dom"
 import { buildTiles, GameTile } from "@/components/GameTile"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, Badge, Button } from "@/components/ui"
-import { getBuild } from "@/data/builds"
+import { getBuild, legacyBuildSlugs } from "@/data/builds"
 import { skillCost, statBuyCost } from "@/lib/utils"
 
 const toc = [
-  ["plan", "Plan"], ["pieces", "Abilities"], ["creation", "Starting character"], ["pilot", "How to play"],
+  ["plan", "Plan"], ["pieces", "Build pieces"], ["creation", "Starting character"], ["pilot", "How to play"],
   ["progression", "Progression"], ["equipment", "Equipment & risks"], ["endgame", "Endgame"], ["credits", "Credits"],
 ]
 
 export function BuildPage() {
   const { slug } = useParams()
-  const build = getBuild(slug)
+  const canonicalSlug = slug ? legacyBuildSlugs[slug] : undefined
+  const build = getBuild(canonicalSlug ?? slug)
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
@@ -21,11 +22,13 @@ export function BuildPage() {
     return () => { document.title = "Sil-Q Builds" }
   }, [build])
 
+  if (canonicalSlug) return <Navigate to={`/builds/${canonicalSlug}`} replace />
   if (!build) return <Navigate to="/not-found" replace />
 
-  const xp = build.creation.skills.reduce((total, skill) => total + skillCost(skill.level), 0) + build.creation.abilities.reduce((total, ability) => total + ability.cost, 0)
-  const statCost = statBuyCost(build.creation.boughtStats)
-  const checklist = `${build.title}\n${build.creation.race} — ${build.creation.house}\nStats: ${build.creation.stats.str} Str / ${build.creation.stats.dex} Dex / ${build.creation.stats.con} Con / ${build.creation.stats.gra} Gra\nSkills: ${build.creation.skills.map((skill) => `${skill.name} ${skill.level}`).join(", ")}\nAbilities: ${build.creation.abilities.map((ability) => ability.name).join(", ")}\nXP spent: ${xp.toLocaleString()} / 5,000`
+  const creation = build.creation
+  const xp = creation.skills.reduce((total, skill) => total + skillCost(skill.level), 0) + creation.abilities.reduce((total, ability) => total + ability.cost, 0)
+  const statCost = statBuyCost(creation.boughtStats)
+  const checklist = `${build.title}\n${creation.race} — ${creation.house}\nStats: ${creation.stats.str} Str / ${creation.stats.dex} Dex / ${creation.stats.con} Con / ${creation.stats.gra} Gra\nSkills: ${creation.skills.map((skill) => `${skill.name} ${skill.level}`).join(", ")}\nAbilities: ${creation.abilities.map((ability) => ability.name).join(", ")}\nXP spent: ${xp.toLocaleString()} / 5,000`
   const copy = async () => {
     await navigator.clipboard.writeText(checklist)
     setCopied(true)
@@ -50,31 +53,36 @@ export function BuildPage() {
       <article className="guide-content">
         <GuideSection id="plan" title="Plan"><p className="build-plan">{build.plan}</p></GuideSection>
 
-        <GuideSection id="pieces" title="Abilities">
-          <div className="key-pieces" role="list">{build.keyPieces.map((piece) => <div className="key-piece" role="listitem" key={piece.name}>
+        <GuideSection id="pieces" title="Build pieces">
+          <h3 className="piece-group-title">Core</h3>
+          <div className="key-pieces" role="list">{build.corePieces.map((piece) => <div className="key-piece" role="listitem" key={piece.name}>
             <div><strong>{piece.name}</strong><Badge>{piece.kind}</Badge></div>
             <dl><div><dt>What it does</dt><dd>{piece.effect}</dd></div><div><dt>Why it matters</dt><dd>{piece.purpose}</dd></div>{piece.timing && <div><dt>When</dt><dd>{piece.timing}</dd></div>}</dl>
           </div>)}</div>
+          <div className="compact-options">
+            <h3 className="piece-group-title">Optional / Later</h3>
+            <div className="optional-list" role="list">{build.optionalAbilities.map((ability) => <OptionalPiece key={ability} ability={ability} />)}</div>
+          </div>
         </GuideSection>
 
         <GuideSection id="creation" title="Starting character">
           <div className="creation-card">
-            <div className="identity-row"><div><small>Race</small><strong>{build.creation.race}</strong></div><div><small>House</small><strong>{build.creation.house}</strong></div></div>
-            <div className="stat-grid">{Object.entries(build.creation.stats).map(([key, value]) => <div key={key}><strong>{value}</strong><span>{key}</span></div>)}</div>
-            <div className="recipe-grid"><div><h3>Skills</h3>{build.creation.skills.map((skill) => <div className="recipe-row" key={skill.name}><span>{skill.name}</span><strong>{skill.level}</strong><small>{skillCost(skill.level).toLocaleString()} XP</small></div>)}</div><div><h3>Abilities</h3>{build.creation.abilities.map((ability) => <div className="ability-row" key={ability.name}><span><strong>{ability.name}</strong>{ability.note && <small>{ability.note}</small>}</span><Badge tone={ability.cost === 0 ? "moss" : "default"}>{ability.cost === 0 ? "Free" : `${ability.cost} XP`}</Badge></div>)}</div></div>
+            <div className="identity-row"><div><small>Race</small><strong>{creation.race}</strong></div><div><small>House</small><strong>{creation.house}</strong></div></div>
+            <div className="stat-grid">{Object.entries(creation.stats).map(([key, value]) => <div key={key}><strong>{value}</strong><span>{key}</span></div>)}</div>
+            <div className="recipe-grid"><div><h3>Skills</h3>{creation.skills.map((skill) => <div className="recipe-row" key={skill.name}><span>{skill.name}</span><strong>{skill.level}</strong><small>{skillCost(skill.level).toLocaleString()} XP</small></div>)}</div><div><h3>Abilities</h3>{creation.abilities.map((ability) => <div className="ability-row" key={ability.name}><span><strong>{ability.name}</strong>{ability.note && <small>{ability.note}</small>}</span><Badge tone={ability.cost === 0 ? "moss" : "default"}>{ability.cost === 0 ? "Free" : `${ability.cost} XP`}</Badge></div>)}</div></div>
             <div className="xp-ledger"><span><small>Stats</small><strong>{statCost} / 13</strong></span><span><small>XP spent</small><strong>{xp.toLocaleString()} / 5,000</strong></span><span><small>Unspent</small><strong>{(5000 - xp).toLocaleString()}</strong></span><Button variant="outline" onClick={copy}>{copied ? <Check size={15} /> : <Clipboard size={15} />}{copied ? "Copied" : "Copy"}</Button></div>
-            <p className="content-note">{build.creation.note}</p>
+            <p className="content-note">{creation.note}</p>
           </div>
         </GuideSection>
 
         <GuideSection id="pilot" title="How to play">
-          <ol className="pilot-steps">{build.piloting.steps.map((step) => <li key={step}>{step}</li>)}</ol>
+          <h3 className="piece-group-title">Gameplay Loop</h3>
+          <ol className="pilot-steps">{build.piloting.gameplayLoop.map((step) => <li key={step}>{step}</li>)}</ol>
           <div className="pilot-grid"><InfoList title="Positioning requirements" items={build.piloting.positioning} /><InfoList title="Retreat or change plan when" items={build.piloting.retreatWhen} tone="danger" /></div>
         </GuideSection>
 
         <GuideSection id="progression" title="Progression">
           <div className="progression-table">{build.milestones.map((item) => <div className="progression-row" key={item.band}><div><strong>{item.band}</strong><span>{item.title}</span></div><ul>{item.priorities.map((priority) => <li key={priority}>{priority}</li>)}</ul><p><strong>Adapt:</strong> {item.adapt}</p></div>)}</div>
-          <div className="compact-options"><strong>Optional abilities</strong><span>{build.optionalAbilities.join(" · ")}</span></div>
           <div className="branch-list"><h3>Build paths</h3>{build.branches.map((branch) => <div key={branch.name}><strong>{branch.name}</strong><p>{branch.description}</p></div>)}</div>
         </GuideSection>
 
@@ -98,6 +106,18 @@ export function BuildPage() {
 
 function GuideSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return <section id={id} className="guide-section"><h2>{title}</h2>{children}</section>
+}
+
+function OptionalPiece({ ability }: { ability: string }) {
+  const separator = ability.indexOf(" — ")
+  const name = separator === -1 ? ability : ability.slice(0, separator)
+  const rawDescription = separator === -1 ? "A situational extension to consider when the run calls for it." : ability.slice(separator + 3)
+  const description = rawDescription.charAt(0).toUpperCase() + rawDescription.slice(1)
+
+  return <div className="optional-item" role="listitem">
+    <strong>{name}</strong>
+    <p>{description}</p>
+  </div>
 }
 
 function InfoList({ title, items, tone }: { title: string; items: string[]; tone?: "danger" }) {

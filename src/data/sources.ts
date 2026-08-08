@@ -37,11 +37,25 @@ export const sources: SourceRef[] = [
     note: "Maintainer sketches for Elbereth, Adversity, Flanking, and practical identification advice.",
   },
   {
-    id: "early-build",
-    title: "Community Fingolfin early build",
-    url: "https://www.reddit.com/r/roguelikes/comments/15u6dfz/my_silq_early_build/",
+    id: "build-suggestions",
+    title: "Sil-Q build suggestions from Quirk and the community",
+    url: "https://www.reddit.com/r/roguelikes/comments/1b8ci1b/silq_build_suggestions/",
+    kind: "Developer advice",
+    note: "Maintainer outlines for Elbereth Archer, Thresholds Pacifist, Smash Smash Smash, and Defensive Polearm, including their limitations.",
+  },
+  {
+    id: "thresholds-control",
+    title: "Practical Song of Thresholds control discussion",
+    url: "https://angband.live/forums/forum/angband/sil/8890-sil-q-review?p=194118",
     kind: "Community guide",
-    note: "Source for the exact 3/3/4/4 Fingolfin opening and its ability branches.",
+    note: "Play-tested tactics for proactive wards, safe boltholes, ranged-enemy manipulation, and combining Thresholds with Listen and Delvings.",
+  },
+  {
+    id: "thresholds-ladder",
+    title: "Thresholds pacifist ladder example",
+    url: "https://angband.live/ladder/ladder-show.php?id=24932",
+    kind: "Ladder evidence",
+    note: "A winning character using Delvings, Listen, Elbereth, Thresholds, and later Mastery.",
   },
   {
     id: "stealth-advice",
@@ -70,13 +84,6 @@ export const sources: SourceRef[] = [
     url: "https://athanasi.us/site/sil_character_builds.html",
     kind: "Community guide",
     note: "Detailed early forge plans for Ring of Secrets and a blocking smith-archer.",
-  },
-  {
-    id: "polearm-ladder",
-    title: "Polearm control ladder example",
-    url: "https://angband.live/ladder/ladder-show.php?id=21654",
-    kind: "Ladder evidence",
-    note: "Deep run combining Polearm Mastery, Focused Attack, Zone of Control, Parry, and Riposte.",
   },
   {
     id: "smith-ladder",

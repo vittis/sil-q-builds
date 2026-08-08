@@ -12,15 +12,18 @@ describe("site routes and interactions", () => {
   it.each(["/", "/builds"])("renders the build library at %s", (route) => {
     renderRoute(route)
     expect(screen.queryByRole("heading", { name: "Build library" })).not.toBeInTheDocument()
-    expect(screen.getByText("Community build guides for Sil-Q, with starting characters, key abilities, progression, and practical play advice.")).toBeInTheDocument()
+    expect(screen.getByText("Community build guides for Sil-Q, with core pieces, progression, and practical gameplay loops.")).toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Ring of Secrets" })).toBeInTheDocument()
     const buildLinks = screen.getAllByRole("link", { name: /build guide$/i })
-    expect(buildLinks).toHaveLength(10)
-    expect(buildLinks.slice(1, 5).map((link) => link.getAttribute("aria-label"))).toEqual([
-      "Open Dodging & Flanking Mobile Duelist build guide",
+    expect(buildLinks).toHaveLength(11)
+    expect(buildLinks.slice(0, 7).map((link) => link.getAttribute("aria-label"))).toEqual([
       "Open Porcupine Light-Spear Smith build guide",
       "Open Ring of Secrets Utility Smith build guide",
+      "Open Dodging & Flanking Mobile Duelist build guide",
+      "Open Smash Smash Smash build guide",
       "Open Adversity & Vengeance Juggernaut build guide",
+      "Open Shield Archer build guide",
+      "Open Elbereth Archer build guide",
     ])
     expect(screen.queryByText(/Steal a Silmaril/i)).not.toBeInTheDocument()
   })
@@ -30,7 +33,7 @@ describe("site routes and interactions", () => {
     expect(screen.queryByRole("searchbox")).not.toBeInTheDocument()
     expect(screen.queryByRole("button", { name: /beginner friendly/i })).not.toBeInTheDocument()
     expect(screen.queryByText("Beginner")).not.toBeInTheDocument()
-    expect(screen.getAllByText("Key Abilities")).toHaveLength(10)
+    expect(screen.getAllByText("Core")).toHaveLength(11)
     expect(screen.queryByText(/10 builds/i)).not.toBeInTheDocument()
     expect(screen.getByRole("link", { name: /new to sil-q\? start with the primer/i })).toHaveAttribute("href", "/primer")
     expect(screen.queryByRole("link", { name: /game source/i })).not.toBeInTheDocument()
@@ -38,10 +41,11 @@ describe("site routes and interactions", () => {
 
   it("makes the full build card the guide link and omits build-type labels", () => {
     renderRoute("/")
-    expect(screen.getByRole("link", { name: /open fingolfin elbereth hybrid build guide/i })).toHaveAttribute("href", "/builds/fingolfin-elbereth-hybrid")
+    expect(screen.getByRole("link", { name: /open elbereth archer build guide/i })).toHaveAttribute("href", "/builds/elbereth-archer")
     expect(screen.queryByText("Complete build")).not.toBeInTheDocument()
     expect(screen.queryByText("Opening package")).not.toBeInTheDocument()
     expect(screen.queryByText("Difficulty")).not.toBeInTheDocument()
+    expect(screen.queryByText("Learning Complexity")).not.toBeInTheDocument()
   })
 
   it("opens the build submission dialog with email and Reddit options", async () => {
@@ -70,17 +74,34 @@ describe("site routes and interactions", () => {
   })
 
   it("opens every canonical build route", () => {
-    renderRoute("/builds/fingolfin-elbereth-hybrid")
-    expect(screen.getByRole("heading", { name: "Fingolfin Elbereth Hybrid", level: 1 })).toBeInTheDocument()
-    expect(screen.getByText(/4,900 \/ 5,000/)).toBeInTheDocument()
-    expect(screen.getByRole("heading", { name: "Abilities", level: 2 })).toBeInTheDocument()
+    renderRoute("/builds/elbereth-archer")
+    expect(screen.getByRole("heading", { name: "Elbereth Archer", level: 1 })).toBeInTheDocument()
+    expect(screen.getByText(/4,200 \/ 5,000/)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Build pieces", level: 2 })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Core", level: 3 })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Optional / Later", level: 3 })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Gameplay Loop", level: 3 })).toBeInTheDocument()
     expect(screen.queryByText("Difficulty")).not.toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Sources" })).not.toBeInTheDocument()
   })
 
+  it("renders Thresholds Controller without difficulty or complexity UI", () => {
+    renderRoute("/builds/thresholds-controller")
+    expect(screen.getByRole("heading", { name: "Thresholds Controller", level: 1 })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Gameplay Loop", level: 3 })).toBeInTheDocument()
+    expect(screen.getByText("Song of Thresholds")).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Starting character" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Starting character" })).toHaveAttribute("href", "#creation")
+    expect(screen.queryByText(/This is a legal reference opening/i)).not.toBeInTheDocument()
+    expect(screen.getByText("An alternate control answer when separation alone is insufficient")).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Copy" })).toBeInTheDocument()
+    expect(screen.queryByText("Difficulty")).not.toBeInTheDocument()
+    expect(screen.queryByText("Learning Complexity")).not.toBeInTheDocument()
+  })
+
   it("copies the starting character setup", async () => {
     const user = userEvent.setup()
-    renderRoute("/builds/fingolfin-elbereth-hybrid")
+    renderRoute("/builds/elbereth-archer")
     await user.click(screen.getByRole("button", { name: "Copy" }))
     expect(screen.getByRole("button", { name: "Copied" })).toBeInTheDocument()
   })
@@ -105,19 +126,36 @@ describe("site routes and interactions", () => {
     expect(screen.getByRole("heading", { name: "Start with a focused character" })).toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Build a core, not a shopping list" })).not.toBeInTheDocument()
     expect(screen.queryByRole("heading", { name: "Sources" })).not.toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Midgame check" })).toBeInTheDocument()
+    expect(screen.getByText(/checkpoint for finding the current run's weaknesses/i)).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "XP discipline" })).toBeInTheDocument()
   })
 
   it("provides anchor navigation on guides", () => {
     renderRoute("/builds/ring-of-secrets-utility-smith")
-    expect(screen.getByRole("link", { name: "Abilities" })).toHaveAttribute("href", "#pieces")
+    expect(screen.getByRole("link", { name: "Build pieces" })).toHaveAttribute("href", "#pieces")
     expect(screen.getByRole("link", { name: "How to play" })).toHaveAttribute("href", "#pilot")
     expect(screen.getByRole("link", { name: "Credits" })).toHaveAttribute("href", "#credits")
   })
 
   it("links each guide to the credited community contribution", () => {
-    renderRoute("/builds/fingolfin-elbereth-hybrid")
+    renderRoute("/builds/elbereth-archer")
     expect(screen.getByRole("heading", { name: "Credits" })).toBeInTheDocument()
-    expect(screen.getByRole("link", { name: /Nwallins: Original opening and early-build outline/i })).toHaveAttribute("href", "https://www.reddit.com/r/roguelikes/comments/15u6dfz/my_silq_early_build/")
+    expect(screen.getByRole("link", { name: /silquirk: Elbereth Archer archetype and progression outline/i })).toHaveAttribute("href", "https://www.reddit.com/r/roguelikes/comments/1b8ci1b/silq_build_suggestions/")
+  })
+
+  it.each([
+    ["/builds/fingolfin-elbereth-hybrid", "Elbereth Archer"],
+    ["/builds/point-blank-blocking-archer", "Shield Archer"],
+    ["/builds/polearm-control-fighter", "Defensive Polearm"],
+  ])("redirects the legacy guide route %s", (route, title) => {
+    renderRoute(route)
+    expect(screen.getByRole("heading", { name: title, level: 1 })).toBeInTheDocument()
+  })
+
+  it("removes the former two-weapon guide route", () => {
+    renderRoute("/builds/rapid-attack-two-weapon")
+    expect(screen.getByRole("heading", { name: "Page not found" })).toBeInTheDocument()
   })
 
   it("shows a concise page for unknown routes", () => {

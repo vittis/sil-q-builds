@@ -11,20 +11,22 @@ const tilePositions = {
   spear: [9, 6],
   ring: [29, 11],
   greatSpear: [10, 6],
+  greatAxe: [15, 6],
   mithrilSword: [4, 6],
 } as const
 
 export const buildTiles: Record<string, keyof typeof tilePositions> = {
-  "fingolfin-elbereth-hybrid": "sword",
+  "elbereth-archer": "bow",
   "dodging-flanking-duelist": "curvedSword",
   "adversity-vengeance-juggernaut": "shield",
-  "point-blank-blocking-archer": "bow",
+  "shield-archer": "bow",
   "stealth-assassin": "dagger",
   "pure-stealth-pacifist": "cloak",
+  "thresholds-controller": "noldor",
   "porcupine-light-spear-smith": "spear",
   "ring-of-secrets-utility-smith": "ring",
-  "polearm-control-fighter": "greatSpear",
-  "rapid-attack-two-weapon": "mithrilSword",
+  "defensive-polearm": "greatSpear",
+  "smash-smash-smash": "greatAxe",
 }
 
 export function GameTile({ name, size = 32, className = "" }: { name: keyof typeof tilePositions; size?: number; className?: string }) {

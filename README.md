@@ -1,6 +1,6 @@
 # Sil-Q Builds
 
-An unofficial Sil-Q 1.5 reference with ten build guides, a compact build library, and a general strategy primer.
+An unofficial Sil-Q 1.5 reference with eleven build guides, a compact build library, and a general strategy primer.
 
 ## Local development
 
