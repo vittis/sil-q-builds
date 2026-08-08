@@ -80,10 +80,14 @@ describe("build content", () => {
     const porcupine = getBuild("porcupine-light-spear-smith")!
     const guideText = JSON.stringify(porcupine)
     const namedSpears = porcupine.corePieces.find((piece) => piece.name === "Gondolin and Doriath slay spears")!
+    const opening = porcupine.milestones[0]
     expect(porcupine.creation.stats).toEqual({ str: 1, dex: 5, con: 4, gra: 4 })
     expect(porcupine.creation.boughtStats).toEqual([1, 3, 2, 2])
     expect(porcupine.creation.note).toMatch(/skill ranks cost 4,400 XP and leave 600.*Enchantment.*leaves 100 unspent/i)
+    expect(porcupine.plan).toMatch(/possible to forge both spears at the 100′ forge/i)
     expect(namedSpears.timing).toBeUndefined()
+    expect(opening.band).toBe("0′–100′")
+    expect(opening.priorities.join(" ")).toMatch(/100′ forge.*very light Spear of Gondolin.*very light Spear of Doriath/i)
     expect(porcupine.gear.join(" ")).toMatch(/Inscribe.*@w1.*@w2.*Press w followed by 1 or 2/i)
     expect(guideText.match(/Gondolin/g)?.length).toBeGreaterThanOrEqual(4)
     expect(guideText.match(/Doriath/g)?.length).toBeGreaterThanOrEqual(4)
