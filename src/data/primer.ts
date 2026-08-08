@@ -26,6 +26,21 @@ export const primerSections: PrimerSection[] = [
     sourceIds: ["manual", "quirk-advice"],
   },
   {
+    id: "useful-information",
+    eyebrow: "Quick reference",
+    title: "Useful information at a glance",
+    intro: "These fixed rules are easy to misremember and useful enough to plan a run around. Ordinary floor layouts, loot, and additional forges remain random.",
+    points: [
+      { title: "Guaranteed forge checkpoints", body: "The three guaranteed forges trigger in order when you first enter 100′ or deeper, 300′ or deeper, and 500′ or deeper. Skipping a threshold does not erase a pending forge, though only one guaranteed forge is placed on a level. A forge generated at 100′ has exactly three uses; later ordinary or enchanted forges normally have three or four." },
+      { title: "Depth moves in 50′ steps", body: "A normal staircase moves one level. A shaft moves two, and falling into a chasm also sends you two levels deeper while dealing falling damage and leaving no return stair. A chasm cannot drop you directly into the 1000′ throne room." },
+      { title: "New depths award XP", body: "The first time you reach each new deepest level from 100′ onward, you gain XP equal to its displayed depth: 100 XP at 100′, 150 XP at 150′, and so on. A shaft or chasm also awards the XP for any level it skips." },
+      { title: "Kills are not the only XP", body: "Encountering an individual monster for the first time can award XP before you fight it; killing it can award a separate amount. Both rewards diminish as you see and kill more of that race. Identifying a new object kind, special item type, or artefact normally awards 100 XP." },
+      { title: "Minimum depth rises with time", body: "The dungeon gradually forces the run downward. Once the minimum depth passes a floor, an up staircase cannot take you above that minimum, so resting and exhaustive exploration are not free." },
+      { title: "Repeated stairs can collapse", body: "Using stairs several times in quick succession raises the chance that they crumble, causing falling damage and potentially leaving you deeper with no staircase back. The risk decays over turns and is tiny in ordinary forward play." },
+    ],
+    sourceIds: ["manual", "changelog"],
+  },
+  {
     id: "morale",
     eyebrow: "Control without damage",
     title: "Morale changes the shape of combat",
@@ -67,7 +82,7 @@ export const primerSections: PrimerSection[] = [
     title: "Forge solutions, not trophies",
     intro: "Smithing is strongest when it guarantees the tool your run needs. It is weakest when experience is sunk into a beautiful item while combat skills fall behind.",
     points: [
-      { title: "Plan for the fixed forges", body: "The first visits to 100′, 300′, and 500′ contain guaranteed forges. Arrive with the relevant ability, Smithing total, and a short priority list." },
+      { title: "Spend forge uses deliberately", body: "A forge is a limited bundle of crafts, not an unlimited shop. Arrive with the relevant ability, Smithing total, reserved XP, and a short priority list." },
       { title: "Solve the next danger", body: "Early identification, regeneration, accuracy, light, protection, or a resistance can remove more risk than a modest damage upgrade." },
       { title: "Do not chase sunk cost", body: "A smithing opener can pivot into a normal fighter. Once the needed items exist, invest in the skills that use them." },
     ],
