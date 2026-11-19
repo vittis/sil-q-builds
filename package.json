@@ -17,6 +17,7 @@
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-tooltip": "latest",
     "@tailwindcss/vite": "latest",
+    "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "latest",
     "clsx": "latest",
     "lucide-react": "latest",
